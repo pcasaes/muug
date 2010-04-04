@@ -17,12 +17,25 @@ struct muug_tilde {
 
 static t_class *muug_tilde_class;
 
+#define MUUG_TILDE_TABLE_RANGE 4
+#define MUUG_TILDE_TABLE_SIZE 512
+static t_sample muug_tilde_tanh[MUUG_TILDE_TABLE_SIZE];
+
+static inline t_sample ttanh(t_sample x) {
+  int t = MUUG_TILDE_TABLE_SIZE * (x + MUUG_TILDE_TABLE_RANGE) / (MUUG_TILDE_TABLE_RANGE * 2);
+  if (t < 0) t = 0;
+  if (t >= MUUG_TILDE_TABLE_SIZE) t = MUUG_TILDE_TABLE_SIZE - 1;
+  return muug_tilde_tanh[t];
+}
+
+#define ttanh tanhf
+
 static void *muug_tilde_new(void) {
   struct muug_tilde *muug = (struct muug_tilde *) pd_new(muug_tilde_class);
   inlet_new(&muug->pd, &muug->pd.ob_pd, &s_signal, &s_signal);
   inlet_new(&muug->pd, &muug->pd.ob_pd, &s_signal, &s_signal);
   outlet_new(&muug->pd, &s_signal);
-  muug->sr  = 44100 * 4; // FIXME
+  muug->sr  = 44100; // FIXME
   muug->v   = 2;
   muug->ya1 = 0;
   muug->wa1 = 0;
@@ -55,13 +68,13 @@ static t_int *muug_tilde_perform(t_int *w) {
     t_sample f = *in_frequency++;
     t_sample r = *in_resonance++;
     t_sample g = 1 - expf(-2 * pi * f / muug->sr);
-    t_sample ya = ya1 + v * g * tanhf((x - 4 * r * yd1) / v - wa1);
-    t_sample wa = tanhf(ya / v);
+    t_sample ya = ya1 + v * g * ttanh((x - 4 * r * yd1) / v - wa1);
+    t_sample wa = ttanh(ya / v);
     t_sample yb = yb1 + v * g * (wa - wb1);
-    t_sample wb = tanhf(yb / v);
+    t_sample wb = ttanh(yb / v);
     t_sample yc = yc1 + v * g * (wb - wc1);
-    t_sample wc = tanhf(yc / v);
-    t_sample yd = yd1 + v * g * (wc - tanhf(yd1 / v));
+    t_sample wc = ttanh(yc / v);
+    t_sample yd = yd1 + v * g * (wc - ttanh(yd1 / v));
     t_sample y = yd;
     ya1 = ya;
     wa1 = wa;
@@ -87,6 +100,10 @@ static void muug_tilde_dsp(struct muug_tilde *muug, t_signal **sp) {
 }
 
 extern void muug_tilde_setup(void) {
+  for (int t = 0; t < MUUG_TILDE_TABLE_SIZE; ++t) {
+    t_sample x = (MUUG_TILDE_TABLE_RANGE * 2) * ((t_sample) t) / MUUG_TILDE_TABLE_SIZE - MUUG_TILDE_TABLE_RANGE;
+    muug_tilde_tanh[t] = tanhf(x);
+  }
   muug_tilde_class = class_new(gensym("muug~"), (t_newmethod) muug_tilde_new, 0, sizeof(struct muug_tilde), 0, 0, 0);
   CLASS_MAINSIGNALIN(muug_tilde_class, struct muug_tilde, dummy);
   class_addmethod(muug_tilde_class, (t_method) muug_tilde_dsp, gensym("dsp"), 0);
