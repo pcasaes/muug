@@ -1,0 +1,12 @@
+To compile run
+
+>make linux
+
+or
+
+>make darwin
+(a darwin universal build should be included already)
+
+Copy the external to your path.
+
+There is no build for windows. If you make one please contact me at irmaosaturno@gmail.com to comit the proper changes to the Makefile as well as adding the dll binary.

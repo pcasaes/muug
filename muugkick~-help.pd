@@ -1,0 +1,26 @@
+#N canvas 286 351 450 300 10;
+#X obj 125 101 muugkick~;
+#X obj 126 240 dac~;
+#X obj 39 37 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X msg 90 47 duration \$1;
+#X floatatom 97 25 5 0 0 0 - - -;
+#X floatatom 188 19 5 0 0 0 - - -;
+#X msg 181 42 transient \$1;
+#X floatatom 278 23 5 0 0 0 - - -;
+#X floatatom 369 27 5 0 0 0 - - -;
+#X msg 271 45 range \$1;
+#X msg 362 50 low \$1;
+#X text 293 111 [muugkick~];
+#X text 275 255 Paulo Casaes \, 2010;
+#X connect 0 0 1 0;
+#X connect 0 0 1 1;
+#X connect 2 0 0 0;
+#X connect 3 0 0 0;
+#X connect 4 0 3 0;
+#X connect 5 0 6 0;
+#X connect 6 0 0 0;
+#X connect 7 0 9 0;
+#X connect 8 0 10 0;
+#X connect 9 0 0 0;
+#X connect 10 0 0 0;
