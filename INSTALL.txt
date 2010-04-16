@@ -7,6 +7,13 @@ or
 >make darwin
 (a darwin universal build should be included already)
 
+or
+>make win32
+(a winxp built with MinGW should already be included)
+
 Copy the external to your path.
 
-There is no build for windows. If you make one please contact me at irmaosaturno@gmail.com to comit the proper changes to the Makefile as well as adding the dll binary.
+Make might complain the m_pd.h is missing. You can either change the Makefile to point to its proper place or copy it to the muug folder.
+
+In windows make will look for pd.dll in c:/Arquivos\ de\ programas/pd/bin/, if PD is not installed there you should change that path.
+
