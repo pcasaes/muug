@@ -1,6 +1,6 @@
 CFLAGS = -std=c99 -DPD -O3 -Wall -W -Wshadow -Wstrict-prototypes -Wno-unused -Wno-parentheses -Wno-switch -DMUUG_INTERPOLATE=1 -DMUUG_TILDE_TABLE_SIZE=512
 
-UNIVERSAL=-arch i386 -arch ppc
+UNIVERSAL=-arch i386 -arch x86_64
 DARWINCFLAGS = $(CFLAGS) -DDARWIN $(UNIVERSAL)
 DARWIN_LIBS=$(UNIVERSAL)
 NTCFLAGS = $(CFLAGS) -DNT
