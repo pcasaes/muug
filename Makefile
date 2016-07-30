@@ -8,7 +8,7 @@ WIN_CC=gcc.exe
 WIN_STRIP=strip.exe
 
 linux: muug~.c
-	gcc $(CFLAGS) -o muug~.o -c muug~.c
+	gcc $(CFLAGS) -fPIC -o muug~.o -c muug~.c
 	ld -export_dynamics -shared -o muug~.pd_linux muug~.o
 	strip --strip-unneeded muug~.pd_linux
 
